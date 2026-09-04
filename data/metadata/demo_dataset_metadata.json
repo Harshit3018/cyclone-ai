@@ -1,0 +1,40 @@
+{
+  "dataset_name": "CYCLONE-AI Demo Dataset",
+  "version": "1.0.0",
+  "created": "2026-09-02T19:01:00Z",
+  "data_type": "SYNTHETIC_DEMO",
+  "description": "Synthetic demonstration dataset for CYCLONE-AI. This data is generated programmatically and does NOT represent real observations, official data, or actual satellite imagery. It is intended solely for system demonstration and testing.",
+  "disclaimer": "SYNTHETIC DEMONSTRATION DATA - Not for operational use. Does not represent real meteorological observations.",
+  "cyclones": 5,
+  "satellite_samples": 50,
+  "image_channels": 4,
+  "image_size": 64,
+  "env_features": 20,
+  "feature_names": [
+    "sst_celsius",
+    "wind_shear_200_850_ms",
+    "rh_700_pct",
+    "temp_200_K",
+    "temp_500_K",
+    "temp_850_K",
+    "u_wind_200_ms",
+    "v_wind_200_ms",
+    "u_wind_850_ms",
+    "v_wind_850_ms",
+    "geopotential_500_m2s2",
+    "mslp_hpa",
+    "vorticity_850",
+    "divergence_200",
+    "specific_humidity_700",
+    "theta_e_850",
+    "vertical_wind_shear_dir",
+    "ocean_heat_content",
+    "mid_level_moisture",
+    "upper_level_divergence"
+  ],
+  "basins": [
+    "NI"
+  ],
+  "source": "CYCLONE-AI Demo Generator (synthetic)",
+  "license": "Part of CYCLONE-AI project - synthetic data"
+}

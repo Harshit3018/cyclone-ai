@@ -1,0 +1,56 @@
+# ==============================================================
+# CYCLONE-AI Docker Compose
+# ==============================================================
+# Usage:
+#   docker compose up --build          # Build and start
+#   docker compose up -d               # Start in background
+#   docker compose down                # Stop
+#   docker compose logs -f cyclone-ai  # View logs
+# ==============================================================
+
+services:
+  cyclone-ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cyclone-ai
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    environment:
+      - APP_ENV=${APP_ENV:-demo}
+      - APP_PORT=8000
+      - APP_HOST=0.0.0.0
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///./cyclone_ai.db}
+      - SERVE_FRONTEND=true
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./data/sample:/app/data/sample:ro
+      - ./models/checkpoints:/app/models/checkpoints
+      - cyclone-db:/app/data/db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
+
+  # --- Optional: PostgreSQL for production ---
+  # Uncomment and set DATABASE_URL=postgresql://cyclone_ai:changeme@db:5432/cyclone_ai
+  #
+  # db:
+  #   image: postgres:16-alpine
+  #   container_name: cyclone-ai-db
+  #   environment:
+  #     POSTGRES_USER: cyclone_ai
+  #     POSTGRES_PASSWORD: changeme
+  #     POSTGRES_DB: cyclone_ai
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+  #   restart: unless-stopped
+
+volumes:
+  cyclone-db:
+  # pgdata:

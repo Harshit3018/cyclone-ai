@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/build/
+.next/
+
+# Environment
+.env
+.env.local
+
+# Database
+*.db
+*.sqlite3
+
+# Data (large files)
+data/raw/
+data/processed/
+*.nc
+*.hdf5
+*.h5
+*.grib
+
+# Model checkpoints (large files)
+models/checkpoints/*.pt
+models/checkpoints/*.pth
+models/checkpoints/*.onnx
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Experiments (optional - may want to track)
+# experiments/
+
+# Logs
+*.log
+logs/
+
+# Docker
+.docker/
+
+# Jupyter
+.ipynb_checkpoints/

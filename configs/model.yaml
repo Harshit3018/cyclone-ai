@@ -1,0 +1,102 @@
+# CYCLONE-AI Model Configuration
+
+# Global settings
+device: "auto"  # auto | cpu | cuda
+seed: 42
+model_dir: "models/checkpoints"
+
+# Satellite CNN backbone
+satellite_cnn:
+  input_channels: 4
+  image_size: 64
+  backbone: "simple_cnn"  # simple_cnn | resnet18
+  feature_dim: 128
+  dropout: 0.3
+
+# Environmental MLP
+environmental_mlp:
+  input_dim: 20  # number of environmental features
+  hidden_dims: [128, 64]
+  output_dim: 64
+  dropout: 0.3
+  activation: "relu"
+
+# Temporal model
+temporal_model:
+  type: "lstm"  # lstm | gru
+  input_dim: 10  # track features per timestep
+  hidden_dim: 64
+  num_layers: 2
+  dropout: 0.2
+  sequence_length: 8  # historical timesteps
+
+# Cyclone detector
+detector:
+  feature_dim: 128
+  num_classes: 2  # cyclone / no-cyclone
+  localization: true  # predict center lat/lon
+
+# Cyclone classifier
+classifier:
+  num_classes: 9
+  class_names:
+    - "Low Pressure Area"
+    - "Well Marked Low"
+    - "Depression"
+    - "Deep Depression"
+    - "Cyclonic Storm"
+    - "Severe Cyclonic Storm"
+    - "Very Severe Cyclonic Storm"
+    - "Extremely Severe Cyclonic Storm"
+    - "Super Cyclonic Storm"
+  # Wind speed thresholds (knots) for IMD classification
+  wind_thresholds: [0, 17, 22, 28, 34, 48, 64, 90, 120]
+
+# Intensity model
+intensity:
+  outputs:
+    - "wind_kph"
+    - "pressure_hpa"
+  uncertainty: true
+  uncertainty_method: "mc_dropout"  # mc_dropout | quantile
+  mc_samples: 20
+
+# Track prediction model
+track:
+  forecast_horizons: [6, 12, 24, 48]  # hours
+  output_dim: 2  # lat, lon per horizon
+  uncertainty: true
+  uncertainty_method: "mc_dropout"
+  mc_samples: 20
+  error_radius_scale: 1.5  # scaling for uncertainty ellipse
+
+# Rapid intensification
+rapid_intensification:
+  threshold_knots_24h: 30  # 30 knot increase in 24h
+  threshold_knots_12h: 20
+  lookback_hours: 24
+
+# Multimodal fusion
+fusion:
+  method: "concat_project"  # concat_project | attention
+  projection_dim: 128
+  dropout: 0.3
+
+# Explainability
+explainability:
+  gradcam:
+    target_layer: "backbone.features.6"  # last conv layer
+    enabled: true
+  feature_importance:
+    method: "permutation"  # permutation | shap
+    top_k: 10
+
+# Model versioning
+version:
+  # Do not call this "Baseline". The forecast table shows the neural models alongside
+  # the analytic baselines in ml/baselines (persistence, CLIP-like), and "baseline"
+  # already means "no trained checkpoint loaded" in the model_status field. Three
+  # different senses of one word in one table is unreadable.
+  name: "CycloneAI Multimodal Net"
+  version: "0.1.0"
+  status: "untrained"

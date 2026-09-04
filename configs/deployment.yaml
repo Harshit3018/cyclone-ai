@@ -1,0 +1,53 @@
+# ==============================================================
+# CYCLONE-AI Deployment Configuration
+# ==============================================================
+
+# Server settings
+server:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 1              # Use 1 for SQLite, increase for PostgreSQL
+  reload: false
+  log_level: "info"
+  timeout_keep_alive: 30
+
+# Frontend serving
+frontend:
+  serve: true             # Serve built frontend from FastAPI
+  dist_dir: "frontend/dist"
+  enable_gzip: true
+
+# Database
+database:
+  # SQLite (default demo/development)
+  url: "sqlite:///./cyclone_ai.db"
+  # PostgreSQL (production)
+  # url: "postgresql://cyclone_ai:changeme@localhost:5432/cyclone_ai"
+  pool_size: 5
+  max_overflow: 10
+
+# ML Models
+models:
+  checkpoint_dir: "models/checkpoints"
+  device: "auto"           # auto | cpu | cuda
+  lazy_loading: true       # Load models on first inference request
+  mc_dropout_samples: 20   # Monte Carlo dropout samples for uncertainty
+
+# Data
+data:
+  sample_dir: "data/sample"
+  max_upload_mb: 50
+
+# Security
+security:
+  cors_origins:
+    - "http://localhost:5173"
+    - "http://localhost:3000"
+    - "http://localhost:8000"
+  rate_limit: 100          # requests per minute per IP
+
+# Monitoring
+monitoring:
+  health_endpoint: "/api/health"
+  enable_metrics: true
+  log_inference_times: true

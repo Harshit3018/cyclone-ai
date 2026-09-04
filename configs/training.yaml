@@ -1,0 +1,61 @@
+# CYCLONE-AI Training Configuration
+
+# General
+seed: 42
+device: "auto"
+num_workers: 2
+pin_memory: true
+
+# Training hyperparameters
+training:
+  batch_size: 16
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 50
+  optimizer: "adam"
+  scheduler: "cosine"
+  warmup_epochs: 5
+  early_stopping:
+    enabled: true
+    patience: 10
+    min_delta: 0.001
+    monitor: "val_loss"
+
+# Loss functions
+loss:
+  detection: "binary_cross_entropy"
+  classification: "cross_entropy"
+  intensity_wind: "mse"
+  intensity_pressure: "mse"
+  track: "mse"
+  localization: "mse"
+
+# Loss weights for multi-task training
+loss_weights:
+  detection: 1.0
+  classification: 1.0
+  intensity: 1.0
+  track: 1.0
+  localization: 0.5
+
+# Data augmentation
+augmentation:
+  enabled: true
+  random_rotation: 15  # degrees
+  random_flip: true
+  random_noise_std: 0.02
+  brightness_range: [0.9, 1.1]
+
+# Checkpointing
+checkpoint:
+  save_dir: "models/checkpoints"
+  save_best: true
+  save_every_n_epochs: 10
+  metric: "val_loss"
+  mode: "min"
+
+# Logging
+logging:
+  log_dir: "experiments"
+  log_every_n_steps: 10
+  save_predictions: true

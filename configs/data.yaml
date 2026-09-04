@@ -1,0 +1,103 @@
+# CYCLONE-AI Data Configuration
+# All data source and preprocessing settings
+
+data_dir: "data"
+sample_dir: "data/sample"
+raw_dir: "data/raw"
+processed_dir: "data/processed"
+metadata_dir: "data/metadata"
+
+# Image preprocessing
+image:
+  size: 64  # H x W for satellite images
+  channels: 4  # IR, WV, VIS, PMW
+  normalize: true
+  nan_fill: 0.0
+  dtype: "float32"
+
+# Temporal alignment
+alignment:
+  time_tolerance_minutes: 30
+  utc_normalize: true
+  interpolation_method: "nearest"  # nearest | linear (only when scientifically appropriate)
+
+# Spatial settings
+spatial:
+  crop_radius_deg: 5.0  # degrees around cyclone center
+  coordinate_system: "WGS84"
+  resampling_method: "bilinear"
+
+# Train/val/test split - STORM-LEVEL (never frame-level)
+split:
+  method: "storm_level"  # CRITICAL: no data leakage
+  train_ratio: 0.70
+  val_ratio: 0.15
+  test_ratio: 0.15
+  random_seed: 42
+
+# IBTrACS configuration
+ibtracs:
+  source: "https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/"
+  version: "v04r01"
+  basin_filter: ["NI"]  # North Indian Ocean
+  min_wind_knots: 25
+  variables:
+    - "SID"
+    - "NAME"
+    - "ISO_TIME"
+    - "LAT"
+    - "LON"
+    - "WMO_WIND"
+    - "WMO_PRES"
+    - "USA_WIND"
+    - "USA_PRES"
+    - "BASIN"
+    - "NATURE"
+    - "DIST2LAND"
+    - "LANDFALL"
+
+# TCIR configuration
+tcir:
+  description: "Tropical Cyclone Intensity estimation using IR imagery"
+  channels:
+    - "infrared"
+    - "water_vapour"
+    - "visible"
+    - "passive_microwave"
+  image_size: 201  # original TCIR size
+
+# ERA5 configuration
+era5:
+  source: "https://cds.climate.copernicus.eu/"
+  variables:
+    pressure_level:
+      - "u_component_of_wind"
+      - "v_component_of_wind"
+      - "temperature"
+      - "relative_humidity"
+      - "geopotential"
+    single_level:
+      - "mean_sea_level_pressure"
+      - "sea_surface_temperature"
+      - "10m_u_component_of_wind"
+      - "10m_v_component_of_wind"
+  pressure_levels: [200, 500, 700, 850]
+  spatial_resolution: 0.25
+  requires_credentials: true
+
+# NASA GPM IMERG
+imerg:
+  source: "https://gpm.nasa.gov/data/imerg"
+  variables:
+    - "precipitation"
+  spatial_resolution: 0.1
+  temporal_resolution: "30min"
+  requires_credentials: true
+
+# Demo data settings
+demo:
+  num_cyclones: 5
+  points_per_cyclone: 40
+  num_satellite_samples: 50
+  basins: ["NI"]
+  years: [2018, 2019, 2020, 2021, 2022, 2023]

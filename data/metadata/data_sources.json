@@ -1,0 +1,34 @@
+[
+  {
+    "name": "CYCLONE-AI Demo Dataset",
+    "type": "SYNTHETIC_DEMO",
+    "description": "Synthetically generated data for demonstration",
+    "real_source_inspiration": "North Indian Ocean cyclone patterns",
+    "is_real_data": false,
+    "license": "Project license"
+  },
+  {
+    "name": "IBTrACS",
+    "type": "EXTERNAL_DATASET",
+    "description": "International Best Track Archive for Climate Stewardship",
+    "provider": "NOAA National Centers for Environmental Information",
+    "url": "https://www.ncei.noaa.gov/products/international-best-track-archive",
+    "license": "Public domain (US Government work)",
+    "status": "Not downloaded - configure in data.yaml"
+  },
+  {
+    "name": "TCIR",
+    "type": "EXTERNAL_DATASET",
+    "description": "Tropical Cyclone Intensity estimation from IR imagery",
+    "status": "Not downloaded - requires separate setup"
+  },
+  {
+    "name": "ERA5",
+    "type": "EXTERNAL_DATASET",
+    "description": "ECMWF Reanalysis v5",
+    "provider": "Copernicus Climate Data Store",
+    "url": "https://cds.climate.copernicus.eu/",
+    "license": "Copernicus License",
+    "status": "Not downloaded - requires CDS API credentials"
+  }
+]
